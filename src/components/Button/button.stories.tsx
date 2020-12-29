@@ -36,7 +36,7 @@ const disbledButton = () => (
 );
 
 storiesOf('Button component', module)
-  .addDecorator(withInfo)
+  .addDecorator(withInfo as any)
   .add('默认 Button', defaultButton)
   .add('不同尺寸的 Button', buttonWithSize)
   .add('不同类型的 Button', buttonWithType)
