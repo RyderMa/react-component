@@ -7,18 +7,18 @@
  * @FilePath: \antd\.storybook\preview.js
  */
 
-import React from 'react';
-import { addDecorator } from '@storybook/react';
-import '../src/styles/index.scss';
+import React from "react";
+// import { addDecorator } from "@storybook/react";
+import "../src/styles/index.scss";
 
 export const parameters = {
-  actions: { argTypesRegex: '^on[A-Z].*' },
+  actions: { argTypesRegex: "^on[A-Z].*" },
 };
 
-const styles: React.CSSProperties = {
-  textAlign: 'center',
-};
-export const CenterDecorators = (Story: any) => (
-  <div style={styles}>{Story()}</div>
-);
-addDecorator(CenterDecorators);
+// const styles: React.CSSProperties = {
+//   textAlign: "center",
+// };
+// export const CenterDecorators = (Story: any) => (
+//   <div style={styles}>{Story()}</div>
+// );
+// addDecorator(CenterDecorators);

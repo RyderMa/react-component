@@ -1,9 +1,9 @@
-import React from 'react';
-import classnames from 'classnames';
+import React from "react";
+import classnames from "classnames";
 
-export type ButtonSize = 'lg' | 'sm';
+export type ButtonSize = "lg" | "sm";
 
-export type ButtonType = 'primary' | 'default' | 'danger' | 'link';
+export type ButtonType = "primary" | "default" | "danger" | "link";
 
 interface BaseButtonProps {
   className?: string;
@@ -21,7 +21,7 @@ type AnchorButtonProps = BaseButtonProps &
 // button和a 属性不通用且不知道会传入什么 Partial 将所有属性设置成可选择的
 export type ButtonProps = Partial<NativeButtonProps & AnchorButtonProps>;
 
-const Button: React.FC<ButtonProps> = (props) => {
+export const Button: React.FC<ButtonProps> = (props) => {
   const {
     btnType,
     className,
@@ -32,13 +32,13 @@ const Button: React.FC<ButtonProps> = (props) => {
     ...restProps
   } = props;
 
-  const classes = classnames('btn', className, {
+  const classes = classnames("btn", className, {
     [`btn-${btnType}`]: btnType,
     [`btn-${size}`]: size,
-    disabled: btnType === 'link' && disabled,
+    disabled: btnType === "link" && disabled,
   });
 
-  if (btnType === 'link' && href) {
+  if (btnType === "link" && href) {
     return (
       <a className={classes} href={href} {...restProps}>
         {children}
@@ -55,7 +55,7 @@ const Button: React.FC<ButtonProps> = (props) => {
 
 Button.defaultProps = {
   disabled: false,
-  btnType: 'default',
+  btnType: "default",
 };
 
 export default Button;
