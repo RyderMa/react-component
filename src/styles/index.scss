@@ -19,5 +19,8 @@
 // icon
 @import '../components/Icon/style';
 
+// input
+@import '../components/Input/style';
+
 // 修复 storybook-info 表格显示问题
 @import './fix-info-style.scss';

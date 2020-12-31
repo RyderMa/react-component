@@ -1,18 +1,19 @@
-import React, { useState } from 'react';
-import Button from './components/Button/button';
-import Menu from './components/Menu/menu';
-import MenuItem from './components/Menu/menuItem';
-import SubMenu from './components/Menu/subMenu';
-import Transition from './components/Transition/transition';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { fas } from '@fortawesome/free-solid-svg-icons';
+import React, { useState } from "react";
+import Button from "./components/Button/button";
+import Menu from "./components/Menu/menu";
+import MenuItem from "./components/Menu/menuItem";
+import SubMenu from "./components/Menu/subMenu";
+import Transition from "./components/Transition/transition";
+import Input from "./components/Input/input";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { fas } from "@fortawesome/free-solid-svg-icons";
 
 library.add(fas);
 
 const App: React.FC = () => {
   const [show, setShow] = useState(true);
   return (
-    <div className="App">
+    <div className="App" style={{ marginLeft: "200px" }}>
       <h3>Button component</h3>
       <Button disabled>123</Button>
       <Button
@@ -33,10 +34,10 @@ const App: React.FC = () => {
       </Button>
       <h3>Menu component</h3>
       <Menu
-        defaultIndex={'0'}
+        defaultIndex={"0"}
         className="test"
-        // mode="vertical"
-        defaultOpenSubMenus={['3']}
+        mode="vertical"
+        defaultOpenSubMenus={["3"]}
       >
         <MenuItem disabled>1</MenuItem>
         <MenuItem>2</MenuItem>
@@ -68,6 +69,8 @@ const App: React.FC = () => {
           transition button
         </Button>
       </Transition>
+      <h3>输入框</h3>
+      <Input></Input>
     </div>
   );
 };

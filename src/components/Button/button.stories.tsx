@@ -1,12 +1,12 @@
-import React from 'react';
-import { storiesOf } from '@storybook/react';
-import { action } from '@storybook/addon-actions';
-import { withInfo } from '@storybook/addon-info';
+import React from "react";
+import { storiesOf } from "@storybook/react";
+import { action } from "@storybook/addon-actions";
+import { withInfo } from "@storybook/addon-info";
 
-import Button from './button';
+import Button from "./button";
 
 const defaultButton = () => (
-  <Button onClick={action('clicked')}>default button</Button>
+  <Button onClick={action("clicked")}>default button</Button>
 );
 
 const buttonWithSize = () => (
@@ -35,9 +35,12 @@ const disbledButton = () => (
   </>
 );
 
-storiesOf('Button component', module)
+storiesOf("Button component", module)
   .addDecorator(withInfo as any)
-  .add('默认 Button', defaultButton)
-  .add('不同尺寸的 Button', buttonWithSize)
-  .add('不同类型的 Button', buttonWithType)
-  .add('不可点击(disabled) Button', disbledButton);
+  // .addParameters({
+  //   info: { inline: true },
+  // })
+  .add("Button", defaultButton)
+  .add("不同尺寸的 Button", buttonWithSize)
+  .add("不同类型的 Button", buttonWithType)
+  .add("不可点击(disabled) Button", disbledButton);
