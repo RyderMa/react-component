@@ -1,8 +1,59 @@
 .mantd-input {
-  padding: 5px 10px;
-  border: 1px solid #d9d9d9;
-  input {
-    border: none;
-    outline: none;
+  font-family: $input-font-family;
+  font-weight: $input-font-weight;
+  line-height: $input-line-height;
+  border-width: $input-border-width;
+  border-style: solid;
+  // border: none;
+  outline: none;
+
+  &.is-disabled {
+    cursor: not-allowed;
+    @include input-style(
+      $input-color,
+      $input-disabled-border-color,
+      $input-disabled-bg,
+      $input-box-shadow
+    );
+    &:hover {
+      @include input-style(
+        $input-color,
+        $input-disabled-border-color,
+        $input-disabled-bg,
+        $input-box-shadow
+      );
+    }
+  }
+
+  @include input-size(
+    $input-padding-x,
+    $input-padding-y,
+    $input-font-size,
+    $input-border-radius
+  );
+
+  @include input-style(
+    $input-color,
+    $input-border-color,
+    $input-bg,
+    $input-box-shadow
+  );
+
+  &:hover {
+    @include input-style(
+      $input-hover-color,
+      $input-hover-border-color,
+      $input-hover-bg,
+      $input-hover-box-shadow
+    );
+  }
+
+  &:focus {
+    @include input-style(
+      $input-focus-color,
+      $input-focus-border-color,
+      $input-focus-bg,
+      $input-focus-box-shadow
+    );
   }
 }

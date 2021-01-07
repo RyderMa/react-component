@@ -1,19 +1,21 @@
-import React, { useState } from "react";
-import Button from "./components/Button/button";
-import Menu from "./components/Menu/menu";
-import MenuItem from "./components/Menu/menuItem";
-import SubMenu from "./components/Menu/subMenu";
-import Transition from "./components/Transition/transition";
-import Input from "./components/Input/input";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { fas } from "@fortawesome/free-solid-svg-icons";
+import React, { useState } from 'react';
+import Button from './components/Button/button';
+import Menu from './components/Menu/menu';
+import MenuItem from './components/Menu/menuItem';
+import SubMenu from './components/Menu/subMenu';
+import Transition from './components/Transition/transition';
+import Input from './components/Input/input';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/free-solid-svg-icons';
 
 library.add(fas);
 
 const App: React.FC = () => {
   const [show, setShow] = useState(true);
+  const [inputTestValue, setInputTestValue] = useState('');
+
   return (
-    <div className="App" style={{ marginLeft: "200px" }}>
+    <div className="App" style={{ marginLeft: '200px' }}>
       <h3>Button component</h3>
       <Button disabled>123</Button>
       <Button
@@ -24,7 +26,14 @@ const App: React.FC = () => {
       >
         123
       </Button>
-      <Button btnType="danger">Danger</Button>
+      <Button
+        btnType="danger"
+        onClick={() => {
+          console.log('inputTestValue', inputTestValue.length);
+        }}
+      >
+        Danger
+      </Button>
       <Button size="lg">123</Button>
       <Button btnType="link" href="http://www.baidu.com" disabled>
         Bai Du
@@ -34,10 +43,10 @@ const App: React.FC = () => {
       </Button>
       <h3>Menu component</h3>
       <Menu
-        defaultIndex={"0"}
+        defaultIndex={'0'}
         className="test"
         mode="vertical"
-        defaultOpenSubMenus={["3"]}
+        defaultOpenSubMenus={['3']}
       >
         <MenuItem disabled>1</MenuItem>
         <MenuItem>2</MenuItem>
@@ -49,7 +58,7 @@ const App: React.FC = () => {
       </Menu>
       <h3>Transition component</h3>
       <Button onClick={() => setShow(!show)}>toggle article</Button>
-      <Transition animation="zoom-in-left" in={show} timeout={300}>
+      {/* <Transition animation="zoom-in-left" in={show} timeout={300}>
         <div>
           <h4>article title</h4>
           <p>article content</p>
@@ -58,7 +67,7 @@ const App: React.FC = () => {
           <p>article content</p>
           <p>article content</p>
         </div>
-      </Transition>
+      </Transition> */}
       <Transition
         wrapper={true}
         animation="zoom-in-left"
@@ -70,7 +79,13 @@ const App: React.FC = () => {
         </Button>
       </Transition>
       <h3>输入框</h3>
-      <Input></Input>
+      <Input
+        placeholder="测试1"
+        value={inputTestValue}
+        onChange={(e) => setInputTestValue(e.target.value)}
+      ></Input>
+      <Input placeholder="禁用" disabled></Input>
+      <Input placeholder="password" type="password"></Input>
     </div>
   );
 };

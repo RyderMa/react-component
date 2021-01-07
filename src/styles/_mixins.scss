@@ -1,3 +1,16 @@
+@mixin input-size($padding-x, $padding-y, $font-size, $border-radius) {
+  padding: $padding-y $padding-x;
+  font-size: $font-size;
+  border-radius: $border-radius;
+}
+
+@mixin input-style($color, $border, $background, $shadow) {
+  color: $color;
+  border-color: $border;
+  background-color: $background;
+  box-shadow: $shadow;
+}
+
 @mixin button-size($padding-x, $padding-y, $font-size, $border-radius) {
   padding: $padding-y $padding-x;
   font-size: $font-size;

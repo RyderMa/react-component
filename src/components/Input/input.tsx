@@ -1,11 +1,11 @@
-import React, { FC } from "react";
-import classnames from "classnames";
+import React, { ChangeEvent, FC } from 'react';
+import classnames from 'classnames';
 
-type InputSize = "lg" | "md" | "sm";
+type InputSize = 'lg' | 'sm';
 
 // Omit 忽略接口中的某个属性
 export interface InputProps  // "size"
-  extends Omit<React.InputHTMLAttributes<HTMLElement>, "size"> {
+  extends Omit<React.InputHTMLAttributes<HTMLElement>, 'size'> {
   /**
    * 类名
    */
@@ -38,6 +38,7 @@ export interface InputProps  // "size"
    * 后置标签
    */
   addonAfter?: string | React.ReactElement;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 export const Input: FC<InputProps> = (props) => {
@@ -54,18 +55,19 @@ export const Input: FC<InputProps> = (props) => {
     ...restProps
   } = props;
 
-  const classes = classnames("mantd-input", className, {
+  if ('value' in props) {
+    // 存在value属性时删除 defaultValue
+    delete restProps.defaultValue;
+  }
+
+  const classes = classnames('mantd-input', className, {
     [`input-size-${size}`]: size,
-    "is-disabled": disabled,
-    "input-prefix": prefixEle,
-    "input-suffix": suffixEle,
+    'is-disabled': disabled,
+    'input-prefix': prefixEle,
+    'input-suffix': suffixEle,
   });
 
-  return (
-    <span className={classes}>
-      <input type="text" disabled={disabled} placeholder={placeholder} />
-    </span>
-  );
+  return <input className={classes} disabled={disabled} {...restProps} />;
 };
 
 export default Input;
