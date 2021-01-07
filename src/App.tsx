@@ -24,6 +24,14 @@ const App: React.FC = () => {
       >
         123
       </Button>
+      <Button
+        onClick={() => {
+          alert(123);
+        }}
+        btnType="primary"
+      >
+        123
+      </Button>
       <Button btnType="danger">Danger</Button>
       <Button size="lg">123</Button>
       <Button btnType="link" href="http://www.baidu.com" disabled>
