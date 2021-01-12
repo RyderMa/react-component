@@ -1,12 +1,12 @@
-import React, { ChangeEvent, FC, useState, useMemo, useRef } from "react";
-import classnames from "classnames";
-import Icon from "../Icon/icon";
+import React, { ChangeEvent, FC, useState, useMemo, useRef } from 'react';
+import classnames from 'classnames';
+import Icon from '../Icon/icon';
 
-type InputSize = "lg" | "sm";
+type InputSize = 'lg' | 'sm';
 
 // Omit 忽略接口中的某个属性
 export interface InputProps  // "size"
-  extends Omit<React.InputHTMLAttributes<HTMLElement>, "size"> {
+  extends Omit<React.InputHTMLAttributes<HTMLElement>, 'size'> {
   /**
    * 类名
    */
@@ -39,8 +39,8 @@ export interface InputProps  // "size"
    * 后置标签
    */
   addonAfter?: string | React.ReactElement;
-  // onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
-  onChange?: (e: any) => void;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  // onChange?: (e: any) => void;
 }
 
 export const Input: FC<InputProps> = (props) => {
@@ -60,24 +60,27 @@ export const Input: FC<InputProps> = (props) => {
   const [isFocus, setIsFocus] = useState(false);
   const inputEle = useRef<HTMLInputElement>(null);
 
-  if ("value" in props) {
+  if ('value' in props) {
     // 存在value属性时删除 defaultValue
     delete restProps.defaultValue;
   }
 
-  const classes = classnames("mantd-input", className, {
+  const classes = classnames('mantd-input', className, {
     [`input-size-${size}`]: size,
-    "is-disabled": disabled,
+    'is-disabled': disabled,
   });
 
   const affixClasses = useMemo(() => {
-    return classnames("mantd-input-affix-wrapper", className, {
+    return classnames('mantd-input-affix-wrapper', className, {
       [`affix-wrapper-${size}`]: size,
-      "affix-wrapper-focused": isFocus,
-      "is-disabled": disabled,
+      'affix-wrapper-focused': isFocus,
+      'is-disabled': disabled,
     });
   }, [className, size, isFocus, disabled]);
 
+  const focus = () => {
+    inputEle.current?.focus();
+  };
   // 聚焦
   const onFocus: React.FocusEventHandler<HTMLInputElement> = (e) => {
     setIsFocus(true);
@@ -95,7 +98,7 @@ export const Input: FC<InputProps> = (props) => {
   };
 
   const onInputWrapperClick = () => {
-    inputEle.current?.focus();
+    focus();
   };
 
   const resolveOnChange = (
@@ -107,14 +110,16 @@ export const Input: FC<InputProps> = (props) => {
   ) => {
     if (onChange) {
       let event = e;
-      if (e.type === "click") {
+      if (e.type === 'click') {
         // click clear icon
         event = Object.create(e);
         event.target = target;
         event.currentTarget = target;
+
         const originalInputValue = target.value;
+
         // change target ref value cause e.target.value should be '' when clear input
-        target.value = "";
+        target.value = '';
         onChange(event as React.ChangeEvent<HTMLInputElement>);
         // reset target ref value
         target.value = originalInputValue;
@@ -125,8 +130,10 @@ export const Input: FC<InputProps> = (props) => {
   };
 
   const handleReset = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
-    console.log(e);
-    restProps.onChange && restProps.onChange("");
+    resolveOnChange(inputEle.current!, e, restProps.onChange);
+    setTimeout(() => {
+      focus();
+    });
   };
 
   const renderClearIcon = () => {
@@ -136,12 +143,13 @@ export const Input: FC<InputProps> = (props) => {
         className="mantd-input-suffix clear"
         onClick={(e) => {
           e.stopPropagation();
+          e.persist(); // 事件处理程序运行后访问事件对象的属性 获取正确的 event
           handleReset(e);
         }}
       >
         <Icon
           theme="dark"
-          style={{ visibility: restProps.value ? "unset" : "hidden" }}
+          style={{ visibility: restProps.value ? 'unset' : 'hidden' }}
           icon="times-circle"
         ></Icon>
       </span>
