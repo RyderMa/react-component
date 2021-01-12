@@ -259,7 +259,7 @@ $input-disabled-border-color: transparent !default;
 $input-color: $gray-700 !default;
 $input-border-color: $gray-400 !default;
 $input-border-width: $border-width !default;
-$input-box-shadow: $box-shadow-inset !default;
+$input-box-shadow: none !default;
 
 $input-border-radius: $border-radius !default;
 $input-border-radius-lg: $border-radius-lg !default;
@@ -268,7 +268,6 @@ $input-border-radius-sm: $border-radius-sm !default;
 $input-hover-bg: $input-bg !default;
 $input-hover-border-color: lighten($primary, 25%) !default;
 $input-hover-color: $input-color !default;
-$input-hover-box-shadow: $box-shadow-inset !default;
 
 $input-focus-bg: $input-bg !default;
 $input-focus-border-color: lighten($primary, 25%) !default;

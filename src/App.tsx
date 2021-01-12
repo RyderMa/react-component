@@ -1,21 +1,22 @@
-import React, { useState } from 'react';
-import Button from './components/Button/button';
-import Menu from './components/Menu/menu';
-import MenuItem from './components/Menu/menuItem';
-import SubMenu from './components/Menu/subMenu';
-import Transition from './components/Transition/transition';
-import Input from './components/Input/input';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { fas } from '@fortawesome/free-solid-svg-icons';
+import React, { useState } from "react";
+import Button from "./components/Button/button";
+import Menu from "./components/Menu/menu";
+import MenuItem from "./components/Menu/menuItem";
+import SubMenu from "./components/Menu/subMenu";
+import Transition from "./components/Transition/transition";
+import Input from "./components/Input/input";
+import Icon from "./components/Icon/icon";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { fas } from "@fortawesome/free-solid-svg-icons";
 
 library.add(fas);
 
 const App: React.FC = () => {
   const [show, setShow] = useState(true);
-  const [inputTestValue, setInputTestValue] = useState('');
+  const [inputTestValue, setInputTestValue] = useState("");
 
   return (
-    <div className="App" style={{ marginLeft: '200px' }}>
+    <div className="App" style={{ marginLeft: "200px" }}>
       <h3>Button component</h3>
       <Button disabled>123</Button>
       <Button
@@ -29,7 +30,7 @@ const App: React.FC = () => {
       <Button
         btnType="danger"
         onClick={() => {
-          console.log('inputTestValue', inputTestValue.length);
+          console.log("inputTestValue", inputTestValue.length);
         }}
       >
         Danger
@@ -43,10 +44,10 @@ const App: React.FC = () => {
       </Button>
       <h3>Menu component</h3>
       <Menu
-        defaultIndex={'0'}
+        defaultIndex={"0"}
         className="test"
         mode="vertical"
-        defaultOpenSubMenus={['3']}
+        defaultOpenSubMenus={["3"]}
       >
         <MenuItem disabled>1</MenuItem>
         <MenuItem>2</MenuItem>
@@ -81,11 +82,42 @@ const App: React.FC = () => {
       <h3>输入框</h3>
       <Input
         placeholder="测试1"
+        size="lg"
         value={inputTestValue}
         onChange={(e) => setInputTestValue(e.target.value)}
       ></Input>
       <Input placeholder="禁用" disabled></Input>
-      <Input placeholder="password" type="password"></Input>
+      <Input placeholder="password" size="sm" type="password"></Input>
+      <h5>带有内置前后元素</h5>
+      <Input
+        prefixEle={<Icon theme="primary" icon="user"></Icon>}
+        placeholder="用户名"
+        size="lg"
+        value={inputTestValue}
+        onChange={(e) => setInputTestValue(e.target.value)}
+      ></Input>
+      <Input
+        suffixEle="RMB"
+        placeholder="金额"
+        size="sm"
+        value={inputTestValue}
+        onChange={(e) => setInputTestValue(e.target.value)}
+      ></Input>
+      <Input
+        prefixEle="前缀"
+        suffixEle="后缀"
+        placeholder="用户名"
+        size="sm"
+        value={inputTestValue}
+        onChange={(e) => setInputTestValue(e.target.value)}
+      ></Input>
+      <h5>可清空输入内容</h5>
+      <Input
+        placeholder="用户名"
+        clearable
+        value={inputTestValue}
+        onChange={(e) => setInputTestValue(e.target.value)}
+      ></Input>
     </div>
   );
 };

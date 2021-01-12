@@ -1,11 +1,28 @@
-.mantd-input {
+.mantd-input,
+.mantd-input-affix-wrapper {
   font-family: $input-font-family;
   font-weight: $input-font-weight;
   line-height: $input-line-height;
   border-width: $input-border-width;
   border-style: solid;
-  // border: none;
   outline: none;
+  transition: $input-transition;
+  
+  @include input-size(
+    $input-padding-x,
+    $input-padding-y,
+    $input-font-size,
+    $input-border-radius
+  );
+
+  @include input-style(
+    $input-color,
+    $input-border-color,
+    $input-bg,
+    $input-box-shadow
+  );
+
+  
 
   &.is-disabled {
     cursor: not-allowed;
@@ -25,30 +42,95 @@
     }
   }
 
-  @include input-size(
-    $input-padding-x,
-    $input-padding-y,
-    $input-font-size,
-    $input-border-radius
-  );
-
-  @include input-style(
-    $input-color,
-    $input-border-color,
-    $input-bg,
-    $input-box-shadow
-  );
-
   &:hover {
     @include input-style(
       $input-hover-color,
       $input-hover-border-color,
       $input-hover-bg,
-      $input-hover-box-shadow
+      $input-box-shadow
     );
+  }
+}
+
+.mantd-input {
+
+  &.input-size-lg {
+    @include input-size(
+      $input-padding-x-lg,
+      $input-padding-y-lg,
+      $input-font-size-lg,
+      $input-border-radius-lg, 
+    )
+  }
+
+  &.input-size-sm {
+    @include input-size(
+      $input-padding-x-sm,
+      $input-padding-y-sm,
+      $input-font-size-sm,
+      $input-border-radius-sm, 
+    )
   }
 
   &:focus {
+    @include input-style(
+      $input-focus-color,
+      $input-focus-border-color,
+      $input-focus-bg,
+      $input-focus-box-shadow
+    );
+  }
+}
+
+.mantd-input-affix-wrapper {
+  display: inline-block;
+  border-style: solid;
+  border-width: $input-border-width;
+
+  .mantd-input {
+    border: none;
+    padding: 0;
+    &:focus {
+      box-shadow: none;
+    }
+  }
+
+  .mantd-input-prefix,
+  .mantd-input-suffix {
+    display: inline-block;
+    height: 100%;
+  }
+
+  .mantd-input-prefix {
+    margin-right: 5px;
+  }
+
+  .mantd-input-suffix {
+    margin-left: 5px;
+    &.clear {
+      cursor: pointer;
+    }
+  }
+
+  &.affix-wrapper-lg {
+    @include input-size(
+      $input-padding-x-lg,
+      $input-padding-y-lg,
+      $input-font-size-lg,
+      $input-border-radius-lg, 
+    )
+  }
+
+  &.affix-wrapper-sm {
+    @include input-size(
+      $input-padding-x-sm,
+      $input-padding-y-sm,
+      $input-font-size-sm,
+      $input-border-radius-sm, 
+    )
+  }
+
+  &.affix-wrapper-focused {
     @include input-style(
       $input-focus-color,
       $input-focus-border-color,
