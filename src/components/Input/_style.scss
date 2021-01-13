@@ -1,5 +1,6 @@
 .mantd-input,
 .mantd-input-affix-wrapper {
+  width: 100%;
   font-family: $input-font-family;
   font-weight: $input-font-weight;
   line-height: $input-line-height;
@@ -21,8 +22,6 @@
     $input-bg,
     $input-box-shadow
   );
-
-  
 
   &.is-disabled {
     cursor: not-allowed;
@@ -83,7 +82,8 @@
 }
 
 .mantd-input-affix-wrapper {
-  display: inline-block;
+  display: inline-flex;
+  width: 100%;
   border-style: solid;
   border-width: $input-border-width;
 
@@ -137,5 +137,70 @@
       $input-focus-bg,
       $input-focus-box-shadow
     );
+  }
+}
+
+.mantd-input-group-wrapper {
+  display: inline-block;
+  width: 100%;
+
+  .mantd-input-group {
+    width: 100%;
+    display: flex;
+    align-items: stretch;
+
+    .mantd-input {
+      &:not(:first-child):not(:last-child) {
+        border-radius: 0;
+      }
+      &:first-child {
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+      }
+      &:last-child {
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+      }
+    }
+
+    .mantd-input-group-addon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 10px;
+      box-sizing: border-box;
+      border-radius: $input-border-radius;
+      border: 1px solid $input-border-color;
+      &:first-child {
+        border-right: 0px;
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+      }
+      &:last-child {
+        border-left: 0px;
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+      }
+    }
+
+    // 搜索按钮样式
+    .btn {
+      margin-left: -1px;
+      border-top-left-radius: 0px;
+      border-bottom-left-radius: 0px;
+    }
+
+  }
+
+  &.input-group-wrapper-sm {
+    .mantd-input-group-addon {
+      font-size: $input-font-size-sm,
+    }
+  }
+
+  &.input-group-wrapper-lg {
+    .mantd-input-group-addon {
+      font-size: $input-font-size-lg,
+    }
   }
 }
