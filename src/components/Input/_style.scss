@@ -146,10 +146,10 @@
 
   .mantd-input-group {
     width: 100%;
-    display: flex;
-    align-items: stretch;
+    display: table;
 
     .mantd-input {
+      display: table-cell;
       &:not(:first-child):not(:last-child) {
         border-radius: 0;
       }
@@ -164,9 +164,7 @@
     }
 
     .mantd-input-group-addon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: table-cell;
       padding: 0 10px;
       box-sizing: border-box;
       border-radius: $input-border-radius;
@@ -183,13 +181,6 @@
       }
     }
 
-    // 搜索按钮样式
-    .btn {
-      margin-left: -1px;
-      border-top-left-radius: 0px;
-      border-bottom-left-radius: 0px;
-    }
-
   }
 
   &.input-group-wrapper-sm {
@@ -201,6 +192,29 @@
   &.input-group-wrapper-lg {
     .mantd-input-group-addon {
       font-size: $input-font-size-lg,
+    }
+  }
+}
+
+.mantd-input-search {
+  .mantd-input-group {
+    .mantd-input-affix-wrapper {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    .mantd-input-group-addon {
+      padding: 0;
+      border: 0;
+      vertical-align: top;
+    }
+    // 搜索按钮样式
+    .btn {
+      border-top-left-radius: 0px;
+      border-bottom-left-radius: 0px;
+      .loading {
+        animation: loadingCircle 1s linear infinite;
+      }
     }
   }
 }
