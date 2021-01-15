@@ -41,6 +41,10 @@ export const Search: FC<SearchProps> = (props) => {
     );
   }, [className, size, disabled]);
 
+  const logTest = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    console.log(e);
+  };
+
   return (
     <span className={searchClasses}>
       <span className="mantd-input-wrapper mantd-input-group">
@@ -48,9 +52,9 @@ export const Search: FC<SearchProps> = (props) => {
           // ref={inputEle}
           size={size}
           disabled={disabled}
+          clearAble={clearAble}
           placeholder={placeholder}
           {...restProps}
-          clearAble={clearAble}
         ></Input>
         <span className="mantd-input-group-addon">
           <Button
@@ -58,7 +62,8 @@ export const Search: FC<SearchProps> = (props) => {
             value={value}
             btnType="primary"
             disabled={disabled}
-            onClick={(e) => onSearch && onSearch("123", e)}
+            // onClick={(e) => onSearch && onSearch("123", e)}
+            onClick={(e) => logTest(e)}
           >
             {loading ? (
               <Icon className="loading" theme="light" icon="spinner"></Icon>
