@@ -1,7 +1,7 @@
-import React, { FC } from "react";
+import React, { FC } from 'react';
 // import classnames from "classnames";
-import Button from "../Button/button";
-import Input, { InputProps } from "./input";
+import Button from '../Button/button';
+import Input, { InputProps } from './input';
 
 export interface SearchProps extends InputProps {
   clearAble?: boolean;
@@ -16,7 +16,7 @@ export const Search: FC<SearchProps> = (props) => {
       <span className="mantd-input-wrapper mantd-input-group">
         <Input></Input>
         <Button btnType="primary" onClick={() => onSearch && onSearch()}>
-          {searchEle ? searchEle : "搜索"}
+          {searchEle ? searchEle : '搜索'}
         </Button>
       </span>
     </span>

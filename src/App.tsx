@@ -1,24 +1,24 @@
-import React, { useState } from "react";
-import Button from "./components/Button/button";
-import Menu from "./components/Menu/menu";
-import MenuItem from "./components/Menu/menuItem";
-import SubMenu from "./components/Menu/subMenu";
-import Transition from "./components/Transition/transition";
-import Input from "./components/Input/input";
-import Search from "./components/Input/search";
-import Icon from "./components/Icon/icon";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { fas } from "@fortawesome/free-solid-svg-icons";
+import React, { useState } from 'react';
+import Button from './components/Button/button';
+import Menu from './components/Menu/menu';
+import MenuItem from './components/Menu/menuItem';
+import SubMenu from './components/Menu/subMenu';
+import Transition from './components/Transition/transition';
+import Input from './components/Input/input';
+import Search from './components/Input/search';
+import Icon from './components/Icon/icon';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/free-solid-svg-icons';
 
 library.add(fas);
 
 const App: React.FC = () => {
   const [show, setShow] = useState(true);
-  const [inputTestValue, setInputTestValue] = useState("");
-  const [clearVlaue, setClearVlaue] = useState("");
+  const [inputTestValue, setInputTestValue] = useState('');
+  const [clearVlaue, setClearVlaue] = useState('');
 
   return (
-    <div className="App" style={{ marginLeft: "200px" }}>
+    <div className="App" style={{ marginLeft: '200px' }}>
       <h3>Button component</h3>
       <Button disabled>123</Button>
       <Button
@@ -32,7 +32,7 @@ const App: React.FC = () => {
       <Button
         btnType="danger"
         onClick={() => {
-          console.log("inputTestValue", inputTestValue.length);
+          console.log('inputTestValue', inputTestValue.length);
         }}
       >
         Danger
@@ -49,10 +49,10 @@ const App: React.FC = () => {
       </Button>
       <h3>Menu component</h3>
       <Menu
-        defaultIndex={"0"}
+        defaultIndex={'0'}
         className="test"
         mode="vertical"
-        defaultOpenSubMenus={["3"]}
+        defaultOpenSubMenus={['3']}
       >
         <MenuItem disabled>1</MenuItem>
         <MenuItem>2</MenuItem>
@@ -124,7 +124,7 @@ const App: React.FC = () => {
         onChange={(e) => setClearVlaue(e.target.value)}
       ></Input>
       <h5>带有前后元素</h5>
-      <p style={{ width: "300px" }}>
+      <p style={{ width: '300px' }}>
         <Input
           size="lg"
           addonBefore="123"
@@ -132,13 +132,13 @@ const App: React.FC = () => {
           placeholder="用户名"
         ></Input>
       </p>
-      <p style={{ width: "200px" }}>
+      <p style={{ width: '200px' }}>
         <Input
           addonAfter={<Icon theme="primary" icon="spinner"></Icon>}
           placeholder="用户名"
         ></Input>
       </p>
-      <p style={{ width: "200px" }}>
+      <p style={{ width: '200px' }}>
         <Input
           size="sm"
           addonBefore={<Icon theme="danger" icon="cloud-moon"></Icon>}

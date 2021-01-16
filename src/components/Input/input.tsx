@@ -1,12 +1,12 @@
-import React, { ChangeEvent, FC, useState, useMemo, useRef } from "react";
-import classnames from "classnames";
-import Icon from "../Icon/icon";
+import React, { ChangeEvent, FC, useState, useMemo, useRef } from 'react';
+import classnames from 'classnames';
+import Icon from '../Icon/icon';
 
-type InputSize = "lg" | "sm";
+type InputSize = 'lg' | 'sm';
 
 // Omit 忽略接口中的某个属性
 export interface InputProps
-  extends Omit<React.InputHTMLAttributes<HTMLElement>, "size"> {
+  extends Omit<React.InputHTMLAttributes<HTMLElement>, 'size'> {
   /**
    * 类名
    */
@@ -63,28 +63,28 @@ export const Input: FC<InputProps> = (props) => {
   const [isFocus, setIsFocus] = useState(false);
   const inputEle = useRef<HTMLInputElement>(null);
 
-  if ("value" in props) {
+  if ('value' in props) {
     // 存在value属性时删除 defaultValue
     delete restProps.defaultValue;
   }
 
-  const classes = classnames("mantd-input", className, {
+  const classes = classnames('mantd-input', className, {
     [`input-size-${size}`]: size,
-    "is-disabled": disabled,
+    'is-disabled': disabled,
   });
 
   const affixClasses = useMemo(() => {
-    return classnames("mantd-input-affix-wrapper", className, {
+    return classnames('mantd-input-affix-wrapper', className, {
       [`affix-wrapper-${size}`]: size,
-      "affix-wrapper-focused": isFocus,
-      "is-disabled": disabled,
+      'affix-wrapper-focused': isFocus,
+      'is-disabled': disabled,
     });
   }, [className, size, isFocus, disabled]);
 
   const groupClasses = useMemo(() => {
-    return classnames("mantd-input-group-wrapper", className, {
+    return classnames('mantd-input-group-wrapper', className, {
       [`input-group-wrapper-${size}`]: size,
-      "is-disabled": disabled,
+      'is-disabled': disabled,
     });
   }, [className, size, disabled]);
 
@@ -121,14 +121,14 @@ export const Input: FC<InputProps> = (props) => {
   ) => {
     if (onChange) {
       let event = e;
-      if (e.type === "click") {
+      if (e.type === 'click') {
         // click clear icon
         event = Object.create(e);
         event.target = target;
         event.currentTarget = target;
         const originalInputValue = target.value;
         // change target ref value cause e.target.value should be '' when clear input
-        target.value = "";
+        target.value = '';
         onChange(event as React.ChangeEvent<HTMLInputElement>);
         // reset target ref value
         target.value = originalInputValue;
@@ -158,7 +158,7 @@ export const Input: FC<InputProps> = (props) => {
       >
         <Icon
           theme="dark"
-          style={{ visibility: restProps.value ? "unset" : "hidden" }}
+          style={{ visibility: restProps.value ? 'unset' : 'hidden' }}
           icon="times-circle"
         ></Icon>
       </span>
