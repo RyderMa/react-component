@@ -16,6 +16,15 @@ const App: React.FC = () => {
   const [show, setShow] = useState(true);
   const [inputTestValue, setInputTestValue] = useState('');
   const [clearVlaue, setClearVlaue] = useState('');
+  const [seachValue, setSeachValue] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSearch = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+  };
 
   return (
     <div className="App" style={{ marginLeft: '200px' }}>
@@ -105,6 +114,7 @@ const App: React.FC = () => {
         suffixEle="RMB"
         placeholder="金额"
         size="sm"
+        disabled
         value={inputTestValue}
         onChange={(e) => setInputTestValue(e.target.value)}
       ></Input>
@@ -136,6 +146,7 @@ const App: React.FC = () => {
         <Input
           addonAfter={<Icon theme="primary" icon="spinner"></Icon>}
           placeholder="用户名"
+          disabled
         ></Input>
       </p>
       <p style={{ width: '200px' }}>
@@ -146,7 +157,15 @@ const App: React.FC = () => {
         ></Input>
       </p>
       <h5>搜索功能</h5>
-      <Search></Search>
+      <p style={{ width: '200px' }}>
+        <Search
+          size="sm"
+          value={seachValue}
+          loading={isLoading}
+          onSearch={() => handleSearch()}
+          onChange={(e) => setSeachValue(e.target.value)}
+        ></Search>
+      </p>
     </div>
   );
 };

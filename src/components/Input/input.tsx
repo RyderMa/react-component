@@ -88,6 +88,13 @@ export const Input: FC<InputProps> = (props) => {
     });
   }, [className, size, disabled]);
 
+  const groupInputClasses = useMemo(() => {
+    return classnames("mantd-input", {
+      [`input-size-${size}`]: size,
+      "is-disabled": disabled,
+    });
+  }, [disabled, size]);
+
   const focus = () => {
     inputEle.current?.focus();
   };
@@ -172,7 +179,7 @@ export const Input: FC<InputProps> = (props) => {
         {prefixEle && <span className="mantd-input-prefix">{prefixEle}</span>}
         <input
           ref={inputEle}
-          className={classes}
+          className={groupInputClasses}
           disabled={disabled}
           placeholder={placeholder}
           onFocus={(e) => onFocus(e)}
@@ -195,7 +202,7 @@ export const Input: FC<InputProps> = (props) => {
             <span className="mantd-input-group-addon">{addonBefore}</span>
           )}
           <input
-            className={classes}
+            className={groupInputClasses}
             disabled={disabled}
             placeholder={placeholder}
             {...restProps}
