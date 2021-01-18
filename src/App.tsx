@@ -20,6 +20,8 @@ const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSearch = () => {
+    console.log('seachValue', seachValue);
+
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);

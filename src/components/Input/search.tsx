@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useRef } from 'react';
+import React, { FC, useMemo } from 'react';
 import classnames from 'classnames';
 import Icon from '../Icon/icon';
 import Button from '../Button/button';
@@ -8,10 +8,7 @@ export interface SearchProps extends InputProps {
   clearAble?: boolean;
   loading?: boolean;
   searchEle?: string | React.ReactNode;
-  onSearch?: (
-    value?: string,
-    event?: React.MouseEvent<HTMLElement, MouseEvent>
-  ) => void;
+  onSearch?: (value?: string) => void;
 }
 
 export const Search: FC<SearchProps> = (props) => {
@@ -28,8 +25,6 @@ export const Search: FC<SearchProps> = (props) => {
     ...restProps
   } = props;
 
-  const inputEle = useRef<typeof Input | HTMLInputElement>(null);
-
   const searchClasses = useMemo(() => {
     return classnames(
       'mantd-input-group-wrapper mantd-input-search',
@@ -41,15 +36,10 @@ export const Search: FC<SearchProps> = (props) => {
     );
   }, [className, size, disabled]);
 
-  const logTest = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
-    console.log(e);
-  };
-
   return (
     <span className={searchClasses}>
       <span className="mantd-input-wrapper mantd-input-group">
         <Input
-          // ref={inputEle}
           size={size}
           disabled={disabled}
           clearAble={clearAble}
@@ -63,7 +53,10 @@ export const Search: FC<SearchProps> = (props) => {
             btnType="primary"
             disabled={disabled}
             // onClick={(e) => onSearch && onSearch("123", e)}
-            onClick={(e) => logTest(e)}
+            onClick={(e) => {
+              e.stopPropagation();
+              onSearch && onSearch();
+            }}
           >
             {loading ? (
               <Icon className="loading" theme="light" icon="spinner"></Icon>
