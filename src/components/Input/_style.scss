@@ -218,3 +218,25 @@
     }
   }
 }
+
+.mantd-autocomplete-wrapper {
+  .suggestions-list,
+  .suggestions-item {
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    list-style: none;
+  }
+  .suggestions-list {
+    margin-top: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,.2);
+  }
+  .suggestions-item {
+    padding: 5px 12px;
+    cursor: pointer;
+    transition: background-color .3s ease-in-out;
+    &:hover {
+      background-color: #e6f7ff;
+    }
+  }
+}
