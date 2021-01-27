@@ -3,16 +3,24 @@ import classnames from 'classnames';
 import Input, { InputProps } from './input';
 import Transition from '../Transition/transition';
 
+interface DataSourceObject {
+  value: string;
+}
+
+export type DataSourceType<T = {}> = T & DataSourceObject;
 export interface AutoCompleteProps extends Omit<InputProps, 'onSelect'> {
   /**
-   * 获取筛选结果
+   * 筛选方法
    */
-  fetchSuggestions: (str: string) => string[];
+  fetchSuggestions: (str: string) => DataSourceType[];
   /**
-   * 选择某一项结果
+   * 选择事件
    */
-  onSelect?: (item: string) => void;
-  renderOptions?: (item: string) => ReactElement;
+  onSelect?: (item: DataSourceType) => void;
+  /**
+   * 渲染子节点的方法
+   */
+  renderOptions?: (item: DataSourceType) => ReactElement;
 }
 
 export const AutoComplete: FC<AutoCompleteProps> = (props) => {
@@ -26,7 +34,7 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
   const [inputValue, setInputValue] = useState(value); // 输入内容
   const [show, setShow] = useState(true); // 筛选结果显示
   const [activeIndex, setActiveIndex] = useState(0); // 当前选择
-  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [suggestions, setSuggestions] = useState<DataSourceType[]>([]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.trim();
@@ -41,11 +49,11 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
     }
   };
 
-  const handleSelect = (item: string, index: number) => {
+  const handleSelect = (item: DataSourceType, index: number) => {
     // setSuggestions([]);
-    setInputValue(item);
+    setInputValue(item.value);
     setActiveIndex(index);
-    const result = fetchSuggestions(item);
+    const result = fetchSuggestions(item.value);
     setSuggestions(result);
     onSelect && typeof onSelect === 'function' && onSelect(item);
   };
@@ -60,7 +68,7 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
     setShow(false);
   };
 
-  const renderTemplate = (item: string) => {
+  const renderTemplate = (item: DataSourceType) => {
     return renderOptions ? renderOptions(item) : item;
   };
 
@@ -76,9 +84,9 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
       {show}
       <Transition animation="zoom-in-top" in={show} timeout={300}>
         <ul className="suggestions-list">
-          {suggestions.map((item: string, index: number) => (
+          {suggestions.map((item: DataSourceType, index: number) => (
             <li
-              key={item}
+              key={item.value}
               className={classnames('suggestions-item', {
                 'suggestions-item-selected': index === activeIndex,
               })}
