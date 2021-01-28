@@ -6,12 +6,17 @@ import SubMenu from './components/Menu/subMenu';
 import Transition from './components/Transition/transition';
 import Input from './components/Input/input';
 import Search from './components/Input/search';
-import AutoComplete from './components/Input/autoComplete';
+import AutoComplete, { DataSourceType } from './components/Input/autoComplete';
 import Icon from './components/Icon/icon';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 
 library.add(fas);
+
+interface heroProps {
+  value: string;
+  no: number;
+}
 
 const App: React.FC = () => {
   const [show, setShow] = useState(true);
@@ -21,6 +26,14 @@ const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [autoComValue, setAutoComValue] = useState('');
   const options = ['Jux', 'LeeSin', 'Lux', 'Yi', 'Yasuo', 'Fiora'];
+  const objOptions = [
+    { value: 'Jux', no: 12 },
+    { value: 'LeeSin', no: 20 },
+    { value: 'Lux', no: 202 },
+    { value: 'Yi', no: 120 },
+    { value: 'Yasuo', no: 30 },
+    { value: 'Fiora', no: 40 },
+  ];
 
   const handleSearch = () => {
     setIsLoading(true);
@@ -29,12 +42,21 @@ const App: React.FC = () => {
     }, 2000);
   };
 
+  // const handleFetch = (query: string) => {
+  //   return options.filter((item) => item.includes(query));
+  // };
+
   const handleFetch = (query: string) => {
-    return options.filter((item) => item.includes(query));
+    return objOptions.filter((item) => item.value.includes(query));
   };
 
-  const handleSelect = (item: string) => {
-    console.log(item);
+  const handleSelect = (item: DataSourceType) => {
+    const itemCopy = item as DataSourceType<heroProps>;
+    console.log(item.no);
+  };
+
+  const renderItem = (item: DataSourceType) => {
+    return <div>Name: {item.value}</div>;
   };
 
   return (
@@ -183,6 +205,7 @@ const App: React.FC = () => {
         value={autoComValue}
         fetchSuggestions={handleFetch}
         onSelect={handleSelect}
+        renderOptions={renderItem}
       ></AutoComplete>
     </div>
   );
