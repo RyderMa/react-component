@@ -1,9 +1,9 @@
-import React, { ChangeEvent, FC, ReactElement, useState } from 'react';
-import classnames from 'classnames';
-import Input, { InputProps } from './input';
-import Transition from '../Transition/transition';
+import React, { ChangeEvent, FC, ReactElement, useState } from "react";
+import classnames from "classnames";
+import Input, { InputProps } from "./input";
+import Transition from "../Transition/transition";
 
-export interface AutoCompleteProps extends Omit<InputProps, 'onSelect'> {
+export interface AutoCompleteProps extends Omit<InputProps, "onSelect"> {
   /**
    * 获取筛选结果
    */
@@ -47,13 +47,15 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
     setActiveIndex(index);
     const result = fetchSuggestions(item);
     setSuggestions(result);
-    onSelect && typeof onSelect === 'function' && onSelect(item);
+    const currentIndex = result.findIndex((resultItem) => resultItem === item);
+    setActiveIndex(currentIndex);
+    console.log("currentIndex", currentIndex);
+
+    onSelect && typeof onSelect === "function" && onSelect(item);
   };
 
   const onFocus: React.FocusEventHandler<HTMLInputElement> = () => {
-    if (inputValue) {
-      setShow(true);
-    }
+    inputValue && setShow(true);
   };
 
   const onBlur: React.FocusEventHandler<HTMLInputElement> = () => {
@@ -79,8 +81,8 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
           {suggestions.map((item: string, index: number) => (
             <li
               key={item}
-              className={classnames('suggestions-item', {
-                'suggestions-item-selected': index === activeIndex,
+              className={classnames("suggestions-item", {
+                "suggestions-item-selected": index === activeIndex,
               })}
               onClick={() => handleSelect(item, index)}
             >
