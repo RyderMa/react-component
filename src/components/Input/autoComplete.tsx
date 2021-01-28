@@ -8,7 +8,7 @@ interface DataSourceObject {
 }
 
 export type DataSourceType<T = {}> = T & DataSourceObject;
-export interface AutoCompleteProps extends Omit<InputProps, 'onSelect'> {
+export interface AutoCompleteProps extends Omit<InputProps, "onSelect"> {
   /**
    * 筛选方法
    */
@@ -88,15 +88,9 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
         <ul className="suggestions-list">
           {suggestions.map((item: DataSourceType, index: number) => (
             <li
-<<<<<<< HEAD
-              key={item}
+              key={item.value}
               className={classnames("suggestions-item", {
                 "suggestions-item-selected": index === activeIndex,
-=======
-              key={item.value}
-              className={classnames('suggestions-item', {
-                'suggestions-item-selected': index === activeIndex,
->>>>>>> 3f74cedc42d6835f5e3e2a62f6fb429dcd2bcb7e
               })}
               onClick={() => handleSelect(item, index)}
             >
