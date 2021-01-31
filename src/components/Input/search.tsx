@@ -59,7 +59,12 @@ export const Search: FC<SearchProps> = (props) => {
             }}
           >
             {loading ? (
-              <Icon className="loading" theme="light" icon="spinner"></Icon>
+              <Icon
+                className="loading"
+                theme="light"
+                icon="spinner"
+                // spin
+              ></Icon>
             ) : searchEle ? (
               searchEle
             ) : (

@@ -25,15 +25,15 @@ const App: React.FC = () => {
   const [seachValue, setSeachValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [autoComValue, setAutoComValue] = useState('');
-  const options = ['Jux', 'LeeSin', 'Lux', 'Yi', 'Yasuo', 'Fiora'];
-  const objOptions = [
-    { value: 'Jux', no: 12 },
-    { value: 'LeeSin', no: 20 },
-    { value: 'Lux', no: 202 },
-    { value: 'Yi', no: 120 },
-    { value: 'Yasuo', no: 30 },
-    { value: 'Fiora', no: 40 },
-  ];
+  // const options = ['Jux', 'LeeSin', 'Lux', 'Yi', 'Yasuo', 'Fiora'];
+  // const objOptions = [
+  //   { value: 'Jux', no: 12 },
+  //   { value: 'LeeSin', no: 20 },
+  //   { value: 'Lux', no: 202 },
+  //   { value: 'Yi', no: 120 },
+  //   { value: 'Yasuo', no: 30 },
+  //   { value: 'Fiora', no: 40 },
+  // ];
 
   const handleSearch = () => {
     setIsLoading(true);
@@ -46,13 +46,27 @@ const App: React.FC = () => {
   //   return options.filter((item) => item.includes(query));
   // };
 
+  // const handleFetch = (query: string) => {
+  //   return objOptions.filter((item) => item.value.includes(query));
+  // };
   const handleFetch = (query: string) => {
-    return objOptions.filter((item) => item.value.includes(query));
+    return fetch(`https://api.github.com/search/users?q=${query}`)
+      .then((res) => {
+        if (res.status === 200) {
+          return res.json();
+        }
+      })
+      .then(({ items }) => {
+        return items.slice(0, 10).map((item: any) => ({
+          value: item.login,
+          ...item,
+        }));
+      })
+      .catch((error) => error('Fetch Error: ', error));
   };
 
   const handleSelect = (item: DataSourceType) => {
     const itemCopy = item as DataSourceType<heroProps>;
-    console.log(item.no);
   };
 
   const renderItem = (item: DataSourceType) => {
