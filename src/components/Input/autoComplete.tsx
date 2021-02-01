@@ -1,8 +1,15 @@
-import React, { ChangeEvent, FC, ReactElement, useState } from 'react';
+import React, {
+  ChangeEvent,
+  FC,
+  ReactElement,
+  useState,
+  useEffect,
+} from 'react';
 import classnames from 'classnames';
 import Input, { InputProps } from './input';
 import Icon from '../Icon/icon';
 import Transition from '../Transition/transition';
+import useDebounce from '../../hooks/useDebounce';
 
 interface DataSourceObject {
   value: string;
@@ -36,17 +43,16 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
   } = props;
   const [show, setShow] = useState(true); // 筛选结果显示
   const [loading, setLoading] = useState(false);
-  const [inputValue, setInputValue] = useState(value); // 输入内容
+  const [inputValue, setInputValue] = useState(value as string); // 输入内容
   const [activeIndex, setActiveIndex] = useState(0); // 当前选择
   const [suggestions, setSuggestions] = useState<DataSourceType[]>([]);
+  const debounceValue = useDebounce(inputValue, 1000);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.trim();
-    setInputValue(value);
-    if (value) {
+  useEffect(() => {
+    if (debounceValue) {
       setShow(true);
       setLoading(true);
-      const result = fetchSuggestions(value);
+      const result = fetchSuggestions(debounceValue);
       if (result instanceof Promise) {
         result.then((data) => {
           setLoading(false);
@@ -59,25 +65,33 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
       setSuggestions([]);
       setShow(false);
     }
+  }, [debounceValue, fetchSuggestions]);
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.trim();
+    setInputValue(value);
   };
 
   const handleSelect = (item: DataSourceType, index: number) => {
     let currentIndex = 0;
-    const result = fetchSuggestions(item.value);
+    const result = suggestions.filter((suggestion) =>
+      suggestion.value.includes(item.value)
+    );
     // setSuggestions([]);
     setInputValue(item.value);
+
     setActiveIndex(index);
-    if (result instanceof Promise) {
-      result.then((data) => {
-        setSuggestions(data);
-        currentIndex = data.findIndex((resultItem) => resultItem === item);
-        setActiveIndex(currentIndex);
-      });
-    } else {
-      setSuggestions(result);
-      currentIndex = result.findIndex((resultItem) => resultItem === item);
-      setActiveIndex(currentIndex);
-    }
+    // if (result instanceof Promise) {
+    //   result.then((data) => {
+    //     setSuggestions(data);
+    //     currentIndex = data.findIndex((resultItem) => resultItem === item);
+    //     setActiveIndex(currentIndex);
+    //   });
+    // } else {
+    setSuggestions(result);
+    currentIndex = result.findIndex((resultItem) => resultItem === item);
+    setActiveIndex(currentIndex);
+    // }
     onSelect && typeof onSelect === 'function' && onSelect(item);
   };
 
