@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import Button from './components/Button/button';
-import Menu from './components/Menu/menu';
-import MenuItem from './components/Menu/menuItem';
-import SubMenu from './components/Menu/subMenu';
-import Transition from './components/Transition/transition';
-import Input from './components/Input/input';
-import Search from './components/Input/search';
-import AutoComplete, { DataSourceType } from './components/Input/autoComplete';
-import Icon from './components/Icon/icon';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { fas } from '@fortawesome/free-solid-svg-icons';
+import React, { useState } from "react";
+import Button from "./components/Button/button";
+import Menu from "./components/Menu/menu";
+import MenuItem from "./components/Menu/menuItem";
+import SubMenu from "./components/Menu/subMenu";
+import Transition from "./components/Transition/transition";
+import Input from "./components/Input/input";
+import Search from "./components/Input/search";
+import AutoComplete, { DataSourceType } from "./components/Input/autoComplete";
+import Icon from "./components/Icon/icon";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { fas } from "@fortawesome/free-solid-svg-icons";
 
 library.add(fas);
 
@@ -20,19 +20,19 @@ interface heroProps {
 
 const App: React.FC = () => {
   const [show, setShow] = useState(true);
-  const [inputTestValue, setInputTestValue] = useState('');
-  const [clearVlaue, setClearVlaue] = useState('');
-  const [seachValue, setSeachValue] = useState('');
+  const [inputTestValue, setInputTestValue] = useState("");
+  const [clearVlaue, setClearVlaue] = useState("");
+  const [seachValue, setSeachValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [autoComValue, setAutoComValue] = useState('');
-  const options = ['Jux', 'LeeSin', 'Lux', 'Yi', 'Yasuo', 'Fiora'];
+  const [autoComValue, setAutoComValue] = useState("");
+  const options = ["Jux", "LeeSin", "Lux", "Yi", "Yasuo", "Fiora"];
   const objOptions = [
-    { value: 'Jux', no: 12 },
-    { value: 'LeeSin', no: 20 },
-    { value: 'Lux', no: 202 },
-    { value: 'Yi', no: 120 },
-    { value: 'Yasuo', no: 30 },
-    { value: 'Fiora', no: 40 },
+    { value: "Jux", no: 12 },
+    { value: "LeeSin", no: 20 },
+    { value: "Lux", no: 202 },
+    { value: "Yi", no: 120 },
+    { value: "Yasuo", no: 30 },
+    { value: "Fiora", no: 40 },
   ];
 
   const handleSearch = () => {
@@ -52,7 +52,7 @@ const App: React.FC = () => {
 
   const handleSelect = (item: DataSourceType) => {
     const itemCopy = item as DataSourceType<heroProps>;
-    console.log(item.no);
+    console.log(itemCopy.no);
   };
 
   const renderItem = (item: DataSourceType) => {
@@ -60,7 +60,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="App" style={{ margin: '100px' }}>
+    <div className="App" style={{ margin: "100px" }}>
       <h3>Button component</h3>
       <Button disabled>123</Button>
       <Button
@@ -74,7 +74,7 @@ const App: React.FC = () => {
       <Button
         btnType="danger"
         onClick={() => {
-          console.log('inputTestValue', inputTestValue.length);
+          console.log("inputTestValue", inputTestValue.length);
         }}
       >
         Danger
@@ -91,10 +91,10 @@ const App: React.FC = () => {
       </Button>
       <h3>Menu component</h3>
       <Menu
-        defaultIndex={'0'}
+        defaultIndex={"0"}
         className="test"
         mode="vertical"
-        defaultOpenSubMenus={['3']}
+        defaultOpenSubMenus={["3"]}
       >
         <MenuItem disabled>1</MenuItem>
         <MenuItem>2</MenuItem>
@@ -167,7 +167,7 @@ const App: React.FC = () => {
         onChange={(e) => setClearVlaue(e.target.value)}
       ></Input>
       <h5>带有前后元素</h5>
-      <p style={{ width: '300px' }}>
+      <p style={{ width: "300px" }}>
         <Input
           size="lg"
           addonBefore="123"
@@ -175,14 +175,14 @@ const App: React.FC = () => {
           placeholder="用户名"
         ></Input>
       </p>
-      <p style={{ width: '200px' }}>
+      <p style={{ width: "200px" }}>
         <Input
           addonAfter={<Icon theme="primary" icon="spinner"></Icon>}
           placeholder="用户名"
           disabled
         ></Input>
       </p>
-      <p style={{ width: '200px' }}>
+      <p style={{ width: "200px" }}>
         <Input
           size="sm"
           addonBefore={<Icon theme="danger" icon="cloud-moon"></Icon>}
@@ -190,7 +190,7 @@ const App: React.FC = () => {
         ></Input>
       </p>
       <h5>搜索功能</h5>
-      <p style={{ width: '200px' }}>
+      <p style={{ width: "200px" }}>
         <Search
           size="sm"
           value={seachValue}
