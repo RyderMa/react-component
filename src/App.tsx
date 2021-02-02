@@ -25,15 +25,6 @@ const App: React.FC = () => {
   const [seachValue, setSeachValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [autoComValue, setAutoComValue] = useState("");
-  // const options = ['Jux', 'LeeSin', 'Lux', 'Yi', 'Yasuo', 'Fiora'];
-  // const objOptions = [
-  //   { value: 'Jux', no: 12 },
-  //   { value: 'LeeSin', no: 20 },
-  //   { value: 'Lux', no: 202 },
-  //   { value: 'Yi', no: 120 },
-  //   { value: 'Yasuo', no: 30 },
-  //   { value: 'Fiora', no: 40 },
-  // ];
 
   const handleSearch = () => {
     setIsLoading(true);
@@ -49,6 +40,7 @@ const App: React.FC = () => {
   // const handleFetch = (query: string) => {
   //   return objOptions.filter((item) => item.value.includes(query));
   // };
+
   const handleFetch = (query: string) => {
     return fetch(`https://api.github.com/search/users?q=${query}`)
       .then((res) => {
@@ -220,6 +212,7 @@ const App: React.FC = () => {
         fetchSuggestions={handleFetch}
         onSelect={handleSelect}
         renderOptions={renderItem}
+        debounce
       ></AutoComplete>
     </div>
   );

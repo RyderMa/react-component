@@ -4,19 +4,20 @@ import React, {
   ReactElement,
   useState,
   useEffect,
-} from 'react';
-import classnames from 'classnames';
-import Input, { InputProps } from './input';
-import Icon from '../Icon/icon';
-import Transition from '../Transition/transition';
-import useDebounce from '../../hooks/useDebounce';
+  useCallback,
+} from "react";
+import classnames from "classnames";
+import Input, { InputProps } from "./input";
+import Icon from "../Icon/icon";
+import Transition from "../Transition/transition";
+import useDebounce from "../../hooks/useDebounce";
 
 interface DataSourceObject {
   value: string;
 }
 
 export type DataSourceType<T = {}> = T & DataSourceObject;
-export interface AutoCompleteProps extends Omit<InputProps, 'onSelect'> {
+export interface AutoCompleteProps extends Omit<InputProps, "onSelect"> {
   /**
    * 筛选方法
    */
@@ -31,6 +32,11 @@ export interface AutoCompleteProps extends Omit<InputProps, 'onSelect'> {
    * 渲染子节点的方法
    */
   renderOptions?: (item: DataSourceType) => ReactElement;
+  /**
+   * 是否开启 Debounce
+   */
+  debounce?: boolean;
+  delay?: number;
 }
 
 export const AutoComplete: FC<AutoCompleteProps> = (props) => {
@@ -38,38 +44,50 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
     fetchSuggestions,
     onSelect,
     value,
+    debounce,
+    delay,
     renderOptions,
     ...restProps
   } = props;
   const [show, setShow] = useState(true); // 筛选结果显示
   const [loading, setLoading] = useState(false);
   const [inputValue, setInputValue] = useState(value as string); // 输入内容
+  const [dependentValue, setDependentValue] = useState(value as string); // bebounce依赖 value
   const [activeIndex, setActiveIndex] = useState(0); // 当前选择
   const [suggestions, setSuggestions] = useState<DataSourceType[]>([]);
-  const debounceValue = useDebounce(inputValue, 1000);
+  const debounceValue = useDebounce(dependentValue, delay || 500);
+
+  const onChange = useCallback(
+    (value: string) => {
+      if (value) {
+        setShow(true);
+        setLoading(true);
+        const result = fetchSuggestions(value);
+        if (result instanceof Promise) {
+          result.then((data) => {
+            setLoading(false);
+            setSuggestions(data);
+          });
+        } else {
+          setSuggestions(result);
+        }
+      } else {
+        setShow(false);
+        setSuggestions([]);
+      }
+    },
+    [setShow, setLoading, setSuggestions, fetchSuggestions]
+  );
 
   useEffect(() => {
-    if (debounceValue) {
-      setShow(true);
-      setLoading(true);
-      const result = fetchSuggestions(debounceValue);
-      if (result instanceof Promise) {
-        result.then((data) => {
-          setLoading(false);
-          setSuggestions(data);
-        });
-      } else {
-        setSuggestions(result);
-      }
-    } else {
-      setSuggestions([]);
-      setShow(false);
-    }
-  }, [debounceValue, fetchSuggestions]);
+    if (!debounce) return;
+    onChange(debounceValue);
+  }, [debounce, debounceValue, onChange, fetchSuggestions]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.trim();
     setInputValue(value);
+    debounce ? setDependentValue(value) : onChange(value);
   };
 
   const handleSelect = (item: DataSourceType, index: number) => {
@@ -77,22 +95,12 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
     const result = suggestions.filter((suggestion) =>
       suggestion.value.includes(item.value)
     );
-    // setSuggestions([]);
     setInputValue(item.value);
-
     setActiveIndex(index);
-    // if (result instanceof Promise) {
-    //   result.then((data) => {
-    //     setSuggestions(data);
-    //     currentIndex = data.findIndex((resultItem) => resultItem === item);
-    //     setActiveIndex(currentIndex);
-    //   });
-    // } else {
     setSuggestions(result);
     currentIndex = result.findIndex((resultItem) => resultItem === item);
     setActiveIndex(currentIndex);
-    // }
-    onSelect && typeof onSelect === 'function' && onSelect(item);
+    onSelect && typeof onSelect === "function" && onSelect(item);
   };
 
   const onFocus: React.FocusEventHandler<HTMLInputElement> = () => {
@@ -127,8 +135,8 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
             suggestions.map((item: DataSourceType, index: number) => (
               <li
                 key={item.value}
-                className={classnames('suggestions-item', {
-                  'suggestions-item-selected': index === activeIndex,
+                className={classnames("suggestions-item", {
+                  "suggestions-item-selected": index === activeIndex,
                 })}
                 onClick={() => handleSelect(item, index)}
               >
