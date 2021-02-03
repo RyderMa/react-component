@@ -1,4 +1,14 @@
-import React, { ChangeEvent, FC, useState, useMemo, useRef } from 'react';
+import React, {
+  ChangeEvent,
+  FC,
+  useState,
+  useMemo,
+  useRef,
+  Ref,
+  RefObject,
+  forwardRef,
+  ForwardRefExoticComponent,
+} from 'react';
 import classnames from 'classnames';
 import Icon from '../Icon/icon';
 
@@ -7,6 +17,8 @@ type InputSize = 'lg' | 'sm';
 // Omit 忽略接口中的某个属性
 export interface InputProps
   extends Omit<React.InputHTMLAttributes<HTMLElement>, 'size'> {
+  // ref?: RefObject<HTMLInputElement>;
+  ref?: Ref<HTMLInputElement>;
   /**
    * 类名
    */
@@ -46,184 +58,188 @@ export interface InputProps
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const Input: FC<InputProps> = (props) => {
-  const {
-    className,
-    disabled,
-    size,
-    clearAble,
-    prefixEle,
-    suffixEle,
-    addonBefore,
-    addonAfter,
-    placeholder,
-    ...restProps
-  } = props;
+// : ForwardRefExoticComponent<InputProps>
+export const Input: FC<InputProps> = forwardRef<HTMLInputElement, InputProps>(
+  (props, ref) => {
+    const {
+      className,
+      disabled,
+      size,
+      clearAble,
+      prefixEle,
+      suffixEle,
+      addonBefore,
+      addonAfter,
+      placeholder,
+      ...restProps
+    } = props;
 
-  const [isFocus, setIsFocus] = useState(false);
-  const inputEle = useRef<HTMLInputElement>(null);
+    const [isFocus, setIsFocus] = useState(false);
+    const inputEle = ref || useRef<HTMLInputElement>(null);
 
-  if ('value' in props) {
-    // 存在value属性时删除 defaultValue
-    delete restProps.defaultValue;
-  }
+    if ('value' in props) {
+      // 存在value属性时删除 defaultValue
+      delete restProps.defaultValue;
+    }
 
-  const classes = classnames('mantd-input', className, {
-    [`input-size-${size}`]: size,
-    'is-disabled': disabled,
-  });
-
-  const affixClasses = useMemo(() => {
-    return classnames('mantd-input-affix-wrapper', className, {
-      [`affix-wrapper-${size}`]: size,
-      'affix-wrapper-focused': isFocus,
-      'is-disabled': disabled,
-    });
-  }, [className, size, isFocus, disabled]);
-
-  const groupClasses = useMemo(() => {
-    return classnames('mantd-input-group-wrapper', className, {
-      [`input-group-wrapper-${size}`]: size,
-      'is-disabled': disabled,
-    });
-  }, [className, size, disabled]);
-
-  const groupInputClasses = useMemo(() => {
-    return classnames("mantd-input", {
+    const classes = classnames('mantd-input', className, {
       [`input-size-${size}`]: size,
-      "is-disabled": disabled,
+      'is-disabled': disabled,
     });
-  }, [disabled, size]);
 
-  const focus = () => {
-    inputEle.current?.focus();
-  };
+    const affixClasses = useMemo(() => {
+      return classnames('mantd-input-affix-wrapper', className, {
+        [`affix-wrapper-${size}`]: size,
+        'affix-wrapper-focused': isFocus,
+        'is-disabled': disabled,
+      });
+    }, [className, size, isFocus, disabled]);
 
-  // 聚焦
-  const onFocus: React.FocusEventHandler<HTMLInputElement> = (e) => {
-    setIsFocus(true);
-    if (restProps.onFocus) {
-      restProps.onFocus(e);
-    }
-  };
+    const groupClasses = useMemo(() => {
+      return classnames('mantd-input-group-wrapper', className, {
+        [`input-group-wrapper-${size}`]: size,
+        'is-disabled': disabled,
+      });
+    }, [className, size, disabled]);
 
-  // 失去焦点
-  const onBlur: React.FocusEventHandler<HTMLInputElement> = (e) => {
-    setIsFocus(false);
-    if (restProps.onBlur) {
-      restProps.onBlur(e);
-    }
-  };
+    const groupInputClasses = useMemo(() => {
+      return classnames('mantd-input', {
+        [`input-size-${size}`]: size,
+        'is-disabled': disabled,
+      });
+    }, [disabled, size]);
 
-  const onInputWrapperClick = () => {
-    focus();
-  };
+    const focus = () => {
+      inputEle && inputEle.current && inputEle.current.focus();
+    };
 
-  const resolveOnChange = (
-    target: HTMLInputElement,
-    e:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.MouseEvent<HTMLElement, MouseEvent>,
-    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
-  ) => {
-    if (onChange) {
-      let event = e;
-      if (e.type === 'click') {
-        // click clear icon
-        event = Object.create(e);
-        event.target = target;
-        event.currentTarget = target;
-        const originalInputValue = target.value;
-        // change target ref value cause e.target.value should be '' when clear input
-        target.value = '';
-        onChange(event as React.ChangeEvent<HTMLInputElement>);
-        // reset target ref value
-        target.value = originalInputValue;
-        return;
+    // 聚焦
+    const onFocus: React.FocusEventHandler<HTMLInputElement> = (e) => {
+      setIsFocus(true);
+      if (restProps.onFocus) {
+        restProps.onFocus(e);
       }
-      onChange(event as React.ChangeEvent<HTMLInputElement>);
-    }
-  };
+    };
 
-  // 重置输入内容
-  const handleReset = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
-    resolveOnChange(inputEle.current!, e, restProps.onChange);
-    setTimeout(() => {
+    // 失去焦点
+    const onBlur: React.FocusEventHandler<HTMLInputElement> = (e) => {
+      setIsFocus(false);
+      if (restProps.onBlur) {
+        restProps.onBlur(e);
+      }
+    };
+
+    const onInputWrapperClick = () => {
       focus();
-    });
-  };
+    };
 
-  const renderClearIcon = () => {
-    return (
-      <span
-        className="mantd-input-suffix clear"
-        onClick={(e) => {
-          e.stopPropagation();
-          e.persist(); // 事件处理程序运行后访问事件对象的属性 获取正确的 event
-          handleReset(e);
-        }}
-      >
-        <Icon
-          theme="dark"
-          style={{ visibility: restProps.value ? 'unset' : 'hidden' }}
-          icon="times-circle"
-        ></Icon>
-      </span>
-    );
-  };
+    const resolveOnChange = (
+      target: HTMLInputElement,
+      e:
+        | React.ChangeEvent<HTMLInputElement>
+        | React.MouseEvent<HTMLElement, MouseEvent>,
+      onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
+    ) => {
+      if (onChange) {
+        let event = e;
+        if (e.type === 'click') {
+          // click clear icon
+          event = Object.create(e);
+          event.target = target;
+          event.currentTarget = target;
+          const originalInputValue = target.value;
+          // change target ref value cause e.target.value should be '' when clear input
+          target.value = '';
+          onChange(event as React.ChangeEvent<HTMLInputElement>);
+          // reset target ref value
+          target.value = originalInputValue;
+          return;
+        }
+        onChange(event as React.ChangeEvent<HTMLInputElement>);
+      }
+    };
 
-  // 带有内置前后元素的 Input
-  if (prefixEle || suffixEle || clearAble) {
-    return (
-      <span className={affixClasses} onClick={() => onInputWrapperClick()}>
-        {prefixEle && <span className="mantd-input-prefix">{prefixEle}</span>}
-        <input
-          ref={inputEle}
-          className={groupInputClasses}
-          disabled={disabled}
-          placeholder={placeholder}
-          onFocus={(e) => onFocus(e)}
-          onBlur={(e) => onBlur(e)}
-          {...restProps}
-        />
-        {suffixEle && <span className="mantd-input-suffix">{suffixEle}</span>}
-        {/* 清空 */}
-        {clearAble && renderClearIcon()}
-      </span>
-    );
-  }
+    // 重置输入内容
+    const handleReset = (e: React.MouseEvent<HTMLElement, MouseEvent>) => {
+      resolveOnChange(inputEle.current!, e, restProps.onChange);
+      setTimeout(() => {
+        focus();
+      });
+    };
 
-  // 带有前后元素
-  if (addonAfter || addonBefore) {
-    return (
-      <span className={groupClasses}>
-        <span className="mantd-input-wrapper mantd-input-group">
-          {addonBefore && (
-            <span className="mantd-input-group-addon">{addonBefore}</span>
-          )}
+    const renderClearIcon = () => {
+      return (
+        <span
+          className="mantd-input-suffix clear"
+          onClick={(e) => {
+            e.stopPropagation();
+            e.persist(); // 事件处理程序运行后访问事件对象的属性 获取正确的 event
+            handleReset(e);
+          }}
+        >
+          <Icon
+            theme="dark"
+            style={{ visibility: restProps.value ? 'unset' : 'hidden' }}
+            icon="times-circle"
+          ></Icon>
+        </span>
+      );
+    };
+
+    // 带有内置前后元素的 Input
+    if (prefixEle || suffixEle || clearAble) {
+      return (
+        <span className={affixClasses} onClick={() => onInputWrapperClick()}>
+          {prefixEle && <span className="mantd-input-prefix">{prefixEle}</span>}
           <input
+            ref={inputEle}
             className={groupInputClasses}
             disabled={disabled}
             placeholder={placeholder}
+            onFocus={(e) => onFocus(e)}
+            onBlur={(e) => onBlur(e)}
             {...restProps}
           />
-          {addonAfter && (
-            <span className="mantd-input-group-addon">{addonAfter}</span>
-          )}
+          {suffixEle && <span className="mantd-input-suffix">{suffixEle}</span>}
+          {/* 清空 */}
+          {clearAble && renderClearIcon()}
         </span>
-      </span>
+      );
+    }
+
+    // 带有前后元素
+    if (addonAfter || addonBefore) {
+      return (
+        <span className={groupClasses}>
+          <span className="mantd-input-wrapper mantd-input-group">
+            {addonBefore && (
+              <span className="mantd-input-group-addon">{addonBefore}</span>
+            )}
+            <input
+              className={groupInputClasses}
+              disabled={disabled}
+              placeholder={placeholder}
+              {...restProps}
+            />
+            {addonAfter && (
+              <span className="mantd-input-group-addon">{addonAfter}</span>
+            )}
+          </span>
+        </span>
+      );
+    }
+
+    // 基础 Input
+    return (
+      <input
+        ref={inputEle}
+        className={classes}
+        disabled={disabled}
+        placeholder={placeholder}
+        {...restProps}
+      />
     );
   }
-
-  // 基础 Input
-  return (
-    <input
-      className={classes}
-      disabled={disabled}
-      placeholder={placeholder}
-      {...restProps}
-    />
-  );
-};
+);
 
 export default Input;

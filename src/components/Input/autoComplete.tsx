@@ -5,19 +5,22 @@ import React, {
   useState,
   useEffect,
   useCallback,
-} from "react";
-import classnames from "classnames";
-import Input, { InputProps } from "./input";
-import Icon from "../Icon/icon";
-import Transition from "../Transition/transition";
-import useDebounce from "../../hooks/useDebounce";
+  KeyboardEvent,
+  useRef,
+  createRef,
+} from 'react';
+import classnames from 'classnames';
+import Input, { InputProps } from './input';
+import Icon from '../Icon/icon';
+import Transition from '../Transition/transition';
+import useDebounce from '../../hooks/useDebounce';
 
 interface DataSourceObject {
   value: string;
 }
 
 export type DataSourceType<T = {}> = T & DataSourceObject;
-export interface AutoCompleteProps extends Omit<InputProps, "onSelect"> {
+export interface AutoCompleteProps extends Omit<InputProps, 'onSelect'> {
   /**
    * 筛选方法
    */
@@ -49,18 +52,19 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
     renderOptions,
     ...restProps
   } = props;
-  const [show, setShow] = useState(true); // 筛选结果显示
   const [loading, setLoading] = useState(false);
-  const [inputValue, setInputValue] = useState(value as string); // 输入内容
-  const [dependentValue, setDependentValue] = useState(value as string); // bebounce依赖 value
+  const inputElement = createRef<HTMLInputElement>();
   const [activeIndex, setActiveIndex] = useState(0); // 当前选择
+  const [inputValue, setInputValue] = useState(value as string); // 输入内容
   const [suggestions, setSuggestions] = useState<DataSourceType[]>([]);
+  const [suggestionsShow, setSuggestionsShow] = useState(true); // 筛选结果显示
+  const [dependentValue, setDependentValue] = useState(value as string); // bebounce依赖 value
   const debounceValue = useDebounce(dependentValue, delay || 500);
 
   const onChange = useCallback(
     (value: string) => {
       if (value) {
-        setShow(true);
+        setSuggestionsShow(true);
         setLoading(true);
         const result = fetchSuggestions(value);
         if (result instanceof Promise) {
@@ -72,11 +76,11 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
           setSuggestions(result);
         }
       } else {
-        setShow(false);
+        setSuggestionsShow(false);
         setSuggestions([]);
       }
     },
-    [setShow, setLoading, setSuggestions, fetchSuggestions]
+    [setSuggestionsShow, setLoading, setSuggestions, fetchSuggestions]
   );
 
   useEffect(() => {
@@ -90,6 +94,35 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
     debounce ? setDependentValue(value) : onChange(value);
   };
 
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (inputValue && suggestions.length > 0) {
+      switch (e.keyCode) {
+        case 13:
+          // enter
+          const item = suggestions[activeIndex];
+          item && handleSelect(item, activeIndex);
+          item && setSuggestionsShow(!suggestionsShow);
+          console.log('inputElement', inputElement);
+
+          break;
+        case 27:
+          // esc
+          setInputValue('');
+          setSuggestionsShow(false);
+          break;
+        case 38:
+          // up
+          activeIndex !== 0 && setActiveIndex(activeIndex - 1);
+          break;
+        case 40:
+          // down
+          activeIndex !== suggestions.length - 1 &&
+            setActiveIndex(activeIndex + 1);
+          break;
+      }
+    }
+  };
+
   const handleSelect = (item: DataSourceType, index: number) => {
     let currentIndex = 0;
     const result = suggestions.filter((suggestion) =>
@@ -100,15 +133,15 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
     setSuggestions(result);
     currentIndex = result.findIndex((resultItem) => resultItem === item);
     setActiveIndex(currentIndex);
-    onSelect && typeof onSelect === "function" && onSelect(item);
+    onSelect && typeof onSelect === 'function' && onSelect(item);
   };
 
   const onFocus: React.FocusEventHandler<HTMLInputElement> = () => {
-    inputValue && setShow(true);
+    inputValue && setSuggestionsShow(true);
   };
 
   const onBlur: React.FocusEventHandler<HTMLInputElement> = () => {
-    setShow(false);
+    setSuggestionsShow(false);
   };
 
   const renderTemplate = (item: DataSourceType) => {
@@ -118,14 +151,16 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
   return (
     <div className="mantd-autocomplete-wrapper">
       <Input
+        ref={inputElement}
         value={inputValue}
         onChange={handleChange}
         {...restProps}
         onBlur={onBlur}
         onFocus={onFocus}
+        onKeyDown={handleKeyDown}
       ></Input>
 
-      <Transition animation="zoom-in-top" in={show} timeout={300}>
+      <Transition animation="zoom-in-top" in={suggestionsShow} timeout={300}>
         <ul className="suggestions-list">
           {loading ? (
             <li className="loading-item">
@@ -135,8 +170,8 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
             suggestions.map((item: DataSourceType, index: number) => (
               <li
                 key={item.value}
-                className={classnames("suggestions-item", {
-                  "suggestions-item-selected": index === activeIndex,
+                className={classnames('suggestions-item', {
+                  'suggestions-item-selected': index === activeIndex,
                 })}
                 onClick={() => handleSelect(item, index)}
               >

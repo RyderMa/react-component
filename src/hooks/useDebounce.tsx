@@ -7,8 +7,6 @@ export default function useDebounce(value: string, delay: number) {
   const [debouncedValue, setDebouncedValue] = React.useState(value);
 
   React.useEffect(() => {
-    console.log('value', value);
-
     const handler = setTimeout(() => {
       setDebouncedValue(value);
     }, delay);
