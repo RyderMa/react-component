@@ -6,21 +6,20 @@ import React, {
   useEffect,
   useCallback,
   KeyboardEvent,
-  useRef,
   createRef,
-} from 'react';
-import classnames from 'classnames';
-import Input, { InputProps } from './input';
-import Icon from '../Icon/icon';
-import Transition from '../Transition/transition';
-import useDebounce from '../../hooks/useDebounce';
+} from "react";
+import classnames from "classnames";
+import Input, { InputProps } from "./input";
+import Icon from "../Icon/icon";
+import Transition from "../Transition/transition";
+import useDebounce from "../../hooks/useDebounce";
 
 interface DataSourceObject {
   value: string;
 }
 
 export type DataSourceType<T = {}> = T & DataSourceObject;
-export interface AutoCompleteProps extends Omit<InputProps, 'onSelect'> {
+export interface AutoCompleteProps extends Omit<InputProps, "onSelect"> {
   /**
    * 筛选方法
    */
@@ -100,14 +99,15 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
         case 13:
           // enter
           const item = suggestions[activeIndex];
-          item && handleSelect(item, activeIndex);
-          item && setSuggestionsShow(!suggestionsShow);
-          console.log('inputElement', inputElement);
-
+          if (item) {
+            handleSelect(item, activeIndex);
+            setSuggestionsShow(!suggestionsShow);
+            inputElement.current?.focus();
+          }
           break;
         case 27:
           // esc
-          setInputValue('');
+          setInputValue("");
           setSuggestionsShow(false);
           break;
         case 38:
@@ -133,7 +133,7 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
     setSuggestions(result);
     currentIndex = result.findIndex((resultItem) => resultItem === item);
     setActiveIndex(currentIndex);
-    onSelect && typeof onSelect === 'function' && onSelect(item);
+    onSelect && typeof onSelect === "function" && onSelect(item);
   };
 
   const onFocus: React.FocusEventHandler<HTMLInputElement> = () => {
@@ -144,6 +144,14 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
     setSuggestionsShow(false);
   };
 
+  const onClick = (e?: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    const inputEle = document.querySelector(".autocomplete-input");
+    // 聚焦下点击再次展开 suggestions
+    inputEle === document.activeElement &&
+      suggestions.length > 0 &&
+      setSuggestionsShow(true);
+  };
+
   const renderTemplate = (item: DataSourceType) => {
     return renderOptions ? renderOptions(item) : item;
   };
@@ -151,12 +159,14 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
   return (
     <div className="mantd-autocomplete-wrapper">
       <Input
+        className="autocomplete-input"
         ref={inputElement}
         value={inputValue}
         onChange={handleChange}
         {...restProps}
         onBlur={onBlur}
         onFocus={onFocus}
+        onClick={onClick}
         onKeyDown={handleKeyDown}
       ></Input>
 
@@ -170,8 +180,8 @@ export const AutoComplete: FC<AutoCompleteProps> = (props) => {
             suggestions.map((item: DataSourceType, index: number) => (
               <li
                 key={item.value}
-                className={classnames('suggestions-item', {
-                  'suggestions-item-selected': index === activeIndex,
+                className={classnames("suggestions-item", {
+                  "suggestions-item-selected": index === activeIndex,
                 })}
                 onClick={() => handleSelect(item, index)}
               >
