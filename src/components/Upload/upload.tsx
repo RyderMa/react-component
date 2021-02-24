@@ -1,5 +1,6 @@
 import React, { ChangeEvent, FC, useRef, useState } from 'react';
 import Button from '../Button/button';
+import UploadList from './uploadList';
 import axios from 'axios';
 
 type UploadFileStatus =
@@ -59,6 +60,7 @@ interface uploadProps {
 const Upload: FC<uploadProps> = (props) => {
   const {
     action,
+    defaultFileList,
     beforeUpload,
     onChange,
     onProgress,
@@ -66,7 +68,7 @@ const Upload: FC<uploadProps> = (props) => {
     onError,
   } = props;
   const fileInputElement = useRef<HTMLInputElement>(null);
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [fileList, setFileList] = useState<UploadFile[]>(defaultFileList || []);
 
   const updateFileList = (
     updateFile: UploadFile,
@@ -164,6 +166,7 @@ const Upload: FC<uploadProps> = (props) => {
       <Button className="mantd-upload-button" onClick={handleCLick}>
         点击上传
       </Button>
+      <UploadList fileList={fileList}></UploadList>
     </div>
   );
 };

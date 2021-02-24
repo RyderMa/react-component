@@ -10,7 +10,7 @@ import AutoComplete, { DataSourceType } from './components/Input/autoComplete';
 import Icon from './components/Icon/icon';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
-import Upload from './components/Upload/upload';
+import Upload, { UploadFile } from './components/Upload/upload';
 
 library.add(fas);
 
@@ -27,6 +27,17 @@ const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [autoComValue, setAutoComValue] = useState('');
 
+  const defaultFileList: UploadFile[] = [
+    { uid: '1', name: '文件1.docx', size: 22220, status: 'done' },
+    { uid: '2', name: '文件1.docx', size: 22220, status: 'error' },
+    {
+      uid: '3',
+      name: '文件1.docx',
+      size: 22220,
+      precent: 20,
+      status: 'uploading',
+    },
+  ];
   const handleSearch = () => {
     setIsLoading(true);
     setTimeout(() => {
@@ -230,6 +241,7 @@ const App: React.FC = () => {
         <h3>上传组件</h3>
         <Upload
           action="http://jsonplaceholder.typicode.com/posts"
+          defaultFileList={defaultFileList}
           onChange={handleFileChange}
           onProgress={onUploadProgress}
         ></Upload>
