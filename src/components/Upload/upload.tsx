@@ -66,6 +66,7 @@ const Upload: FC<uploadProps> = (props) => {
     onProgress,
     onSuccess,
     onError,
+    onRemove,
   } = props;
   const fileInputElement = useRef<HTMLInputElement>(null);
   const [fileList, setFileList] = useState<UploadFile[]>(defaultFileList || []);
@@ -117,6 +118,13 @@ const Upload: FC<uploadProps> = (props) => {
     });
   };
 
+  const handleRemove = (file: UploadFile) => {
+    setFileList((preFileList) => {
+      return preFileList.filter((item) => item.uid !== file.uid);
+    });
+    onRemove && onRemove(file);
+  };
+
   const postFile = (file: File) => {
     const _file: UploadFile = {
       uid: Date.now() + 'upload-file',
@@ -166,7 +174,7 @@ const Upload: FC<uploadProps> = (props) => {
       <Button className="mantd-upload-button" onClick={handleCLick}>
         点击上传
       </Button>
-      <UploadList fileList={fileList}></UploadList>
+      <UploadList fileList={fileList} onRemove={handleRemove}></UploadList>
     </div>
   );
 };

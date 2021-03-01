@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { UploadFile } from './upload';
 import Icon from '../Icon/icon';
+import Progress from '../Progress/progress';
 import { isTemplateExpression } from 'typescript';
 
 interface UploadListProps {
@@ -39,6 +40,9 @@ export const UploadList: FC<UploadListProps> = (props) => {
           >
             <Icon icon="trash-alt" theme="secondary"></Icon>
           </span>
+          {file.status === 'uploading' && (
+            <Progress percent={file.precent || 0} />
+          )}
         </li>
       ))}
     </ul>
