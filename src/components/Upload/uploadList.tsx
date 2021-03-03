@@ -2,7 +2,6 @@ import React, { FC } from 'react';
 import { UploadFile } from './upload';
 import Icon from '../Icon/icon';
 import Progress from '../Progress/progress';
-import { isTemplateExpression } from 'typescript';
 
 interface UploadListProps {
   fileList: UploadFile[];
