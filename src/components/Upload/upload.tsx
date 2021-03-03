@@ -55,6 +55,34 @@ interface uploadProps {
    * 失败回调
    */
   onError?: (error: any, file: File) => void;
+  /**
+   * 点击文件链接时的回调
+   */
+  onPreview?: (file: UploadFile) => void;
+  /**
+   * 自定义请求头
+   */
+  headers?: { [key: string]: any };
+  /**
+   * 自定义文件名
+   */
+  name?: string;
+  /**
+   * 请求参数
+   */
+  data?: { [key: string]: any };
+  /**
+   * 是否携带cookie
+   */
+  withCredentials?: boolean;
+  /**
+   * 接收文件类型
+   */
+  accept?: string;
+  /**
+   * 是否支持多选文件
+   */
+  multiple?: boolean;
 }
 
 const Upload: FC<uploadProps> = (props) => {
@@ -67,7 +95,18 @@ const Upload: FC<uploadProps> = (props) => {
     onSuccess,
     onError,
     onRemove,
+    onPreview,
+    name,
+    data,
+    headers,
+    withCredentials,
+    accept,
+    multiple,
+    children,
   } = props;
+
+  console.log('children', children);
+
   const fileInputElement = useRef<HTMLInputElement>(null);
   const [fileList, setFileList] = useState<UploadFile[]>(defaultFileList || []);
 
@@ -134,14 +173,24 @@ const Upload: FC<uploadProps> = (props) => {
       precent: 0,
       raw: file,
     };
-    setFileList([_file, ...fileList]);
+
+    // setFileList([_file, ...fileList]);
+    setFileList((preFileList) => [_file, ...preFileList]);
     const formData = new FormData();
-    formData.append(file.name, file);
+    formData.append(name || 'file', file);
+    if (data) {
+      Object.keys(data).forEach((key) => {
+        formData.append(key, data[key]);
+      });
+    }
+
     axios
       .post(action, formData, {
         headers: {
           'Content-type': 'mulitpart/form-data',
+          ...headers,
         },
+        withCredentials,
         onUploadProgress: (e) => {
           const percentage = Math.round((e.loaded / e.total) * 100);
           onProgress && onProgress(percentage, file);
@@ -149,13 +198,13 @@ const Upload: FC<uploadProps> = (props) => {
         },
       })
       .then((res) => {
-        console.log('上传成功', res);
+        // console.log('上传成功', res);
         updateFileList(_file, { status: 'done', response: res.data });
         onSuccess && onSuccess(res.data, file);
         onChange && onChange(file);
       })
       .catch((err) => {
-        console.error('upload error:', err);
+        // console.error('upload error:', err);
         updateFileList(_file, { status: 'error', error: err });
         onError && onError(err, file);
         onChange && onChange(file);
@@ -170,13 +219,26 @@ const Upload: FC<uploadProps> = (props) => {
         style={{ display: 'none' }}
         className="mantd-upload-input"
         onChange={handleChange}
+        accept={accept}
+        multiple={multiple}
       />
-      <Button className="mantd-upload-button" onClick={handleCLick}>
-        点击上传
-      </Button>
+      {children ? (
+        <div className="mantd-upload-triggier" onClick={handleCLick}>
+          {children}
+        </div>
+      ) : (
+        <Button className="mantd-upload-button" onClick={handleCLick}>
+          点击上传
+        </Button>
+      )}
       <UploadList fileList={fileList} onRemove={handleRemove}></UploadList>
     </div>
   );
+};
+
+Upload.defaultProps = {
+  name: 'file',
+  multiple: false,
 };
 
 export default Upload;

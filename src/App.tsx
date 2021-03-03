@@ -244,7 +244,13 @@ const App: React.FC = () => {
           defaultFileList={defaultFileList}
           onChange={handleFileChange}
           onProgress={onUploadProgress}
-        ></Upload>
+          headers={{ Token: '123' }}
+          data={{ param1: '0' }}
+          accept=".jpg,.docx"
+          multiple={true}
+        >
+          <div>上传</div>
+        </Upload>
       </div>
     </div>
   );
