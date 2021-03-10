@@ -1,5 +1,6 @@
 import React, { ChangeEvent, FC, useRef, useState } from 'react';
 import Button from '../Button/button';
+import Dragger from './dragger';
 import UploadList from './uploadList';
 import axios from 'axios';
 
@@ -83,6 +84,10 @@ interface uploadProps {
    * 是否支持多选文件
    */
   multiple?: boolean;
+  /**
+   * 是否支持拖拽上传
+   */
+  drag?: boolean;
 }
 
 const Upload: FC<uploadProps> = (props) => {
@@ -103,9 +108,10 @@ const Upload: FC<uploadProps> = (props) => {
     accept,
     multiple,
     children,
+    drag,
   } = props;
 
-  console.log('children', children);
+  // console.log('children', children);
 
   const fileInputElement = useRef<HTMLInputElement>(null);
   const [fileList, setFileList] = useState<UploadFile[]>(defaultFileList || []);
@@ -224,7 +230,18 @@ const Upload: FC<uploadProps> = (props) => {
       />
       {children ? (
         <div className="mantd-upload-triggier" onClick={handleCLick}>
-          {children}
+          {drag ? (
+            <Dragger
+              onFile={(files) => {
+                // console.log('files', files);
+                uploadFiles(files);
+              }}
+            >
+              {children}
+            </Dragger>
+          ) : (
+            children
+          )}
         </div>
       ) : (
         <Button className="mantd-upload-button" onClick={handleCLick}>

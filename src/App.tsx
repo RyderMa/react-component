@@ -248,8 +248,10 @@ const App: React.FC = () => {
           data={{ param1: '0' }}
           accept=".jpg,.docx"
           multiple={true}
+          drag
         >
-          <div>上传</div>
+          <Icon icon="upload" theme="secondary" size="5x"></Icon>
+          <div>点击或拖到此处上传</div>
         </Upload>
       </div>
     </div>
