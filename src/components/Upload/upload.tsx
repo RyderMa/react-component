@@ -23,7 +23,7 @@ export interface UploadFile {
   error?: any;
 }
 
-interface uploadProps {
+export interface UploadProps {
   /**
    * 上传路径
    */
@@ -90,7 +90,7 @@ interface uploadProps {
   drag?: boolean;
 }
 
-const Upload: FC<uploadProps> = (props) => {
+export const Upload: FC<UploadProps> = (props) => {
   const {
     action,
     defaultFileList,
