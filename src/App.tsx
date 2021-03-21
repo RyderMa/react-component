@@ -254,6 +254,7 @@ const App: React.FC = () => {
           <div>点击或拖到此处上传</div>
         </Upload>
       </div>
+      <button className="btn">按钮</button>
     </div>
   );
 };

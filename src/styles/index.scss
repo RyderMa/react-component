@@ -28,5 +28,8 @@
 // progress
 @import '../components/Progress/style';
 
+// ripple
+@import '../components/Ripple/style';
+
 // 修复 storybook-info 表格显示问题
 @import './fix-info-style.scss';
