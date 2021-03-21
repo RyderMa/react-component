@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import classnames from 'classnames';
 import { MenuContext } from './menu';
+import Ripple from '../Ripple/ripple';
 
 export interface MenuItemProps {
   index?: string;
@@ -24,6 +25,7 @@ const MenuItem: React.FC<MenuItemProps> = (props) => {
   return (
     <li className={classes} style={style} onClick={handleClick}>
       {children}
+      <Ripple></Ripple>
     </li>
   );
 };

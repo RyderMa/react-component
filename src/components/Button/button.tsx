@@ -1,9 +1,10 @@
-import React, { FC } from "react";
-import classnames from "classnames";
+import React, { FC } from 'react';
+import classnames from 'classnames';
+import Ripple from '../Ripple/ripple';
 
-export type ButtonSize = "lg" | "sm";
+export type ButtonSize = 'lg' | 'sm';
 
-export type ButtonType = "primary" | "default" | "danger" | "link";
+export type ButtonType = 'primary' | 'default' | 'danger' | 'link';
 
 interface BaseButtonProps {
   /**
@@ -60,14 +61,14 @@ export const Button: FC<ButtonProps> = (props) => {
     ...restProps
   } = props;
 
-  const classes = classnames("btn", className, {
+  const classes = classnames('btn', className, {
     [`btn-${btnType}`]: btnType,
     [`btn-${size}`]: size,
-    ripple: ripple,
-    disabled: btnType === "link" && disabled,
+    // ripple: ripple,
+    disabled: btnType === 'link' && disabled,
   });
 
-  if (btnType === "link" && href) {
+  if (btnType === 'link' && href) {
     return (
       <a className={classes} href={href} {...restProps}>
         {children}
@@ -77,6 +78,7 @@ export const Button: FC<ButtonProps> = (props) => {
     return (
       <button className={classes} disabled={disabled} {...restProps}>
         {children}
+        <Ripple></Ripple>
       </button>
     );
   }
@@ -84,7 +86,7 @@ export const Button: FC<ButtonProps> = (props) => {
 
 Button.defaultProps = {
   disabled: false,
-  btnType: "default",
+  btnType: 'default',
   ripple: true,
 };
 
