@@ -4,7 +4,7 @@ import React, {
   useState,
   useLayoutEffect,
   CSSProperties,
-} from 'react';
+} from "react";
 
 interface RippleStyle {
   x: string | number;
@@ -34,7 +34,7 @@ export const Ripple: FC<RippleRrops> = (props) => {
 
   const animationStyle: CSSProperties = {
     backgroundColor: color,
-    animationName: `${center ? 'rippleCenter' : 'ripple'}`,
+    animationName: `${center ? "rippleCenter" : "ripple"}`,
     animationDuration: `${duration}ms`,
   };
 
@@ -92,7 +92,7 @@ export const Ripple: FC<RippleRrops> = (props) => {
           return (
             <span
               className="ripple"
-              key={'span' + index}
+              key={"span" + index}
               style={{
                 top: ripple.y,
                 left: ripple.x,
@@ -109,7 +109,7 @@ export const Ripple: FC<RippleRrops> = (props) => {
 
 Ripple.defaultProps = {
   duration: 850,
-  color: '#000',
+  color: "#000",
   center: false,
 };
 
