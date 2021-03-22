@@ -7,8 +7,13 @@ import { Icon, IconProps } from "./icon";
 library.add(fas);
 
 export default {
-  title: "Icon component",
+  title: "图标组件",
   component: Icon,
+  argTypes: {
+    theme: "primary",
+    icon: "user",
+    size: "2x",
+  },
 } as Meta;
 
 const Template: Story<IconProps> = (args) => <Icon {...args} />;
@@ -17,4 +22,5 @@ export const Primary = Template.bind({});
 Primary.args = {
   theme: "danger",
   icon: "baby",
+  size: "2x",
 };
